@@ -1,20 +1,33 @@
 #include <iostream>
 #include <random>
+#include <Windows.h>
+#include <vector>
+
+
+//constant variables declarations
 const int width = 50;
 const int height = 25;
-
 const char wall = '#';
 const char food = '*';
 const char body = 'O';
 const char space = ' ';
+
 //function declaratons
 void draw_board(char board[height][width]); //this function is to draw the gameboard.
 void generate_food(char board[height][width]); //this function will take the gameboard array as input and return the gameboard array with food.
+void render_snake(char board[height][width], std::vector<std::pair<int,int>> snake);
+
+
+//the snake will be a series of consecutive coordinates,
+//we can represent it on the board by vector of pairs
+
+std::vector<std::pair<int, int>> snake;
+
 int main() {
-	
 	//create 2d array for the game board
 	char gameBoard[height][width];
-
+    snake.push_back(std::make_pair(height / 2, width / 2));
+	
 	// Nested loop to initialize gameBoard
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
@@ -30,7 +43,7 @@ int main() {
 	}
 	//generate food
 	generate_food(gameBoard);
-
+	render_snake(gameBoard, snake);
 	//infinite loop for drawing game board, processing input, updating game logic
 	while (true) {
 		// draw the game board
@@ -56,7 +69,6 @@ void draw_board(char board[height][width]) {
 		for (int j = 0; j < width; j++) {
 			std::cout << board[i][j];
 		}
-
 		std::cout << std::endl;
 	}
 
@@ -74,8 +86,8 @@ void generate_food(char board[height][width]) {
 	std::mt19937 gen(rd());
 
 	//uniform distribution range
-	std::uniform_int_distribution<> height_dis(1, height-1);
-	std::uniform_int_distribution<> width_dis(1, width-1);
+	std::uniform_int_distribution<> height_dis(1, height-2);
+	std::uniform_int_distribution<> width_dis(1, width-2);
 
 	//for loop to update board
 	for (int i = 1; i <= food_amt; i++) {
@@ -83,5 +95,12 @@ void generate_food(char board[height][width]) {
 		int y = width_dis(gen);
 		board[x][y] = food;
 	}
+}
+
+void render_snake(char board[height][width], std::vector<std::pair<int,int>> snake) {
+	for (int i = 0; i < snake.size(); i++) {
+		board[snake[i].first][snake[i].second] = body;
+	}
+
 }
 
