@@ -2,7 +2,7 @@
 #include <random>
 #include <Windows.h>
 #include <vector>
-
+#include <conio.h>
 
 //constant variables declarations
 const int width = 50;
@@ -17,10 +17,8 @@ void draw_board(char board[height][width]); //this function is to draw the gameb
 void generate_food(char board[height][width]); //this function will take the gameboard array as input and return the gameboard array with food.
 void render_snake(char board[height][width], std::vector<std::pair<int,int>> snake);
 
-
 //the snake will be a series of consecutive coordinates,
 //we can represent it on the board by vector of pairs
-
 std::vector<std::pair<int, int>> snake;
 
 int main() {
@@ -43,21 +41,50 @@ int main() {
 	}
 	//generate food
 	generate_food(gameBoard);
+	//render snake
 	render_snake(gameBoard, snake);
-	//infinite loop for drawing game board, processing input, updating game logic
+	int key_pressed_ascii;
+	char key_pressed;
+	//infinite loop for drawing game board, processing input, 
+										//updating game logic
+
 	while (true) {
 		// draw the game board
 		draw_board(gameBoard);
-
 		//reading input
-		//readInput();
+		if (_kbhit()) {//keyboard has been pressed
+			key_pressed_ascii = getch();
+			//find which key was pressed
+			if (key_pressed_ascii == 0 || key_pressed_ascii == 224) {//Extended key
+				key_pressed_ascii = getch();
+				
+				switch (key_pressed_ascii) {
+				case 72:
+					//up arrow
+					break;
+				case 80:
+					//down arrow
+					break;
+				case 75:
+					//left arrow
+					break;
+				case 77:
+					//right arrow
+					break;
+				}
+			}
+			
+			
+		}
 
 		//update game logic
+
 
 		//delay
 
 		//exit loop when game ends
-		break;
+		
+		
 	}
 	return 0;
 }
@@ -101,6 +128,5 @@ void render_snake(char board[height][width], std::vector<std::pair<int,int>> sna
 	for (int i = 0; i < snake.size(); i++) {
 		board[snake[i].first][snake[i].second] = body;
 	}
-
 }
 
